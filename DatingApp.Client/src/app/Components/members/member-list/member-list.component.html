@@ -1,0 +1,67 @@
+<div class="text-center mt-3">
+    <h2>Your Matches - {{pagination?.totalItems}}</h2>
+</div>
+
+<div class="container mt-3">
+    <form #form="ngForm" class="form-inline mb-3" (ngSubmit)="loadMembers()" autocomplete="off">
+        <div class="row mb-3">
+            <div class="col-auto">
+                <div class="row">
+                    <label for="gender" class="col-form-label col-auto">Age from: </label>
+                    <div class="col-auto">
+                        <input type="number" class="form-control" style="width: 70px;" name="minAge"
+                            [(ngModel)]="userParams.minAge">
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="row">
+                    <label for="gender" class="col-form-label col-auto">Age to: </label>
+                    <div class="col-auto">
+                        <input type="number" class="form-control" style="width: 70px;" name="maxAge"
+                            [(ngModel)]="userParams.maxAge">
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="row">
+                    <label for="gender" class="col-form-label col-auto">Gender: </label>
+                    <div class="col-auto">
+                        <select name="gender" class="form-select" [(ngModel)]="userParams.gender">
+                            @for (item of genderList; track $index)
+                            {
+                            <option [value]="item.value">{{item.display}}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit">Apply Filters</button>
+                <button class="btn btn-info ms-2" (click)="resetFilters()">Reset Filters</button>
+                <div class="btn-group float-right ms-2">
+                    <button class="btn btn-warning" name="orderBy" type="button" btnRadio="lastActive" (click)="loadMembers()" [(ngModel)]="userParams.orderBy">Last Active</button>
+                    <button class="btn btn-success" name="created" type="button" btnRadio="created" (click)="loadMembers()" [(ngModel)]="userParams.orderBy">Newest</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    @for (member of this.members; track $index)
+    {
+    <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-5">
+        <app-member-card [member]="member"></app-member-card>
+    </div>
+    }
+</div>
+
+@if(pagination)
+{
+<div class="d-flex justify-content-center">
+    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+        [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+        nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" />
+</div>
+}

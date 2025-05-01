@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container">
+        <a class="navbar-brand" routerLink="/">Dating App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+            @if(currentUser$ | async)
+            {
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/members" routerLinkActive="active">Matches</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/lists" routerLinkActive="active">Lists</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/messages" routerLinkActive="active">Messages</a>
+                </li>
+                <li *appHasRole="['Admin', 'Moderator']" class="nav-item">
+                    <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin</a>
+                </li>
+            </ul>
+            <img src="{{loginUser?.photoUrl || './user.png'}}" alt="{{loginUser?.username}}" class="mx-2">
+            <div class="dropdown" style="color: whitesmoke;">
+                <div class="dropdown-toggle" data-bs-toggle="dropdown">
+                    Welcome {{loginUser?.knownAs || loginUser?.username}}!
+                </div>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" routerLink="/member/edit">Edit Profile</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="$event.preventDefault(); logout();">Logout</a></li>
+                </ul>
+            </div>
+            }
+            @if((currentUser$ | async) === null)
+            {
+            <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off" class="d-lg-flex d-md-flex" role="search">
+                <input [(ngModel)]="user.username" [required]="true" name="username" class="form-control me-2"
+                    type="text" placeholder="username">
+                <input [(ngModel)]="user.password" name="password" class="form-control me-2" type="password"
+                    placeholder="password">
+                    <button class="btn btn-outline-success" type="submit" id="loginButton">Login</button>
+            </form>
+            }
+        </div>
+    </div>
+</nav>

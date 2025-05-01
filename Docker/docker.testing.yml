@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  datingapp:
+    build:
+      context: .
+      dockerfile: Docker/dockerfile.testing
+    image: sit223app-testing:${IMAGE_TAG}
+    container_name: DatingApp-testing
+    ports:
+      - "7014:7014"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+      - ASPNETCORE_URLS=https://+:7014;http://+:5000
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/localhost.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+    volumes:
+      - ./localhost.pfx:/https/localhost.pfx:ro
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://localhost:7014/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

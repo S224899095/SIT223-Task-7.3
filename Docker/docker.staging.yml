@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  datingapp:
+    build:
+      context: .
+      dockerfile: Docker/dockerfile.azure
+    image: sit223app-staging:${IMAGE_TAG}
+    container_name: DatingApp-staging
+    ports:
+      - "8081:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+      - ASPNETCORE_URLS=http://+:80
+    restart: always

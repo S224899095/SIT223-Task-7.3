@@ -1,0 +1,85 @@
+@if(member)
+{
+    <div class="row">
+        <div class="col-4">
+            <h1>Your Profile</h1>
+        </div>
+        <div class="col-8">
+            @if(editForm.dirty)
+            {
+                <div class="alert alert-info">
+                    Information: you have made changes. Any unsaved changes will be lost.
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <img src="{{member.photoUrl || './user.png'}}" alt="{{member.knownAs}}"
+                    class="card-img-top img-thumbnail">
+                <div class="card-body">
+                    <div>
+                        <strong>Location:</strong>
+                        <p>{{member.city}}, {{member.country}}</p>
+                    </div>
+                    <div>
+                        <strong>Age:</strong>
+                        <p>{{member.age}} years old</p>
+                    </div>
+                    <div>
+                        <strong>Last Active:</strong>
+                        <p>{{member.lastActive | date: 'fullDate'}}</p>
+                    </div>
+                    <div>
+                        <strong>Member since:</strong>
+                        <p>{{member.created | date: 'fullDate'}}</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button form="editForm" type="submit" [disabled]="!editForm.dirty" class="btn btn-success w-100">Save Changes</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button"
+                        role="tab" aria-controls="about" aria-selected="true">About {{member.knownAs}}</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="photos-tab" data-bs-toggle="tab" data-bs-target="#photos" type="button"
+                        role="tab" aria-controls="photos" aria-selected="false">Edit Photos</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                    <form #editForm="ngForm" id="editForm" class="mt-2" (ngSubmit)="updateMember();">
+                        <h4>Description</h4>
+                        <textarea name="introduction" [(ngModel)]="member.introduction" class="form-control" rows="6"></textarea>
+                        <h4>Looking for</h4>
+                        <textarea name="lookingFor" [(ngModel)]="member.lookingFor"  class="form-control" rows="6"></textarea>
+                        <h4>Interests</h4>
+                        <textarea name="interests" [(ngModel)]="member.interests"  class="form-control" rows="6"></textarea>
+                        <h4>Location Details</h4>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="city">City: </label>
+                                <input type="text" [(ngModel)]="member.city"  class="form-control" name="city">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="city">Country: </label>
+                                <input type="text" [(ngModel)]="member.country"  class="form-control" name="country">
+                            </div>
+                          </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+                    <div class="mt-2">
+                        <app-photo-editor [member]="member"></app-photo-editor>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

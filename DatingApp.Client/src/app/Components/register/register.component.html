@@ -1,0 +1,130 @@
+<form [formGroup]='registerForm' (ngSubmit)="$event.preventDefault(); registerForm.valid && register()" autocomplete="off">
+    <h2 class="text-center text-primary">Sign Up</h2>
+    <hr />
+
+    <!-- Gender -->
+    <div class="form-group">
+        <label for="username" class="form-label me-3">I am a:</label>
+        <label class="radio-inline">
+            <input type="radio" value="male" formControlName="gender" class="me-2">Male
+        </label>
+        <label class="radio-inline">
+            <input type="radio" value="female" formControlName="gender" class="mx-2">Female
+        </label>
+    </div>
+
+    <!-- Username -->
+    <div class="form-group">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control"
+            [class.is-invalid]='registerForm.get("username")?.errors && registerForm.get("username")?.touched'
+            formControlName="username" placeholder="empty">
+        @if(registerForm.get('password')?.hasError('required'))
+        {
+        <div class="invalid-feedback">Please enter a username</div>
+        }
+    </div>
+
+    <!-- Known As -->
+    <div class="form-group">
+        <label for="knownAs" class="form-label">Known As</label>
+        <input type="text" class="form-control"
+            [class.is-invalid]='registerForm.get("knownAs")?.errors && registerForm.get("knownAs")?.touched'
+            formControlName="knownAs" placeholder="empty">
+        @if(registerForm.get('password')?.hasError('required'))
+        {
+        <div class="invalid-feedback">Please enter a known As</div>
+        }
+    </div>
+
+    <!-- Date Of Brith -->
+    <div class="form-group">
+        <label for="dateOfBirth" class="form-label">Date of Birth</label>
+        <input type="date" class="form-control"
+            [class.is-invalid]='registerForm.get("dateOfBirth")?.errors && registerForm.get("dateOfBirth")?.touched'
+            formControlName="dateOfBirth" placeholder="empty">
+        @if(registerForm.get('password')?.hasError('required'))
+        {
+        <div class="invalid-feedback">Please enter a date of birth</div>
+        }
+    </div>
+
+    <!--City-->
+    <div class="form-group">
+        <label for="city" class="form-label">city</label>
+        <input type="text" class="form-control"
+            [class.is-invalid]='registerForm.get("city")?.errors && registerForm.get("city")?.touched'
+            formControlName="city" placeholder="empty">
+        @if(registerForm.get('password')?.hasError('required'))
+        {
+        <div class="invalid-feedback">Please enter a date of birth</div>
+        }
+    </div>
+
+    <!-- Country -->
+    <div class="form-group">
+        <label for="country" class="form-label">Country</label>
+        <input type="text" class="form-control"
+            [class.is-invalid]='registerForm.get("country")?.errors && registerForm.get("country")?.touched'
+            formControlName="country" placeholder="empty">
+        @if(registerForm.get('password')?.hasError('required'))
+        {
+        <div class="invalid-feedback">Please enter a date of birth</div>
+        }
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control"
+            [class.is-invalid]='registerForm.get("password")?.errors && registerForm.get("password")?.touched'
+            formControlName="password" placeholder="empty">
+        @if(registerForm.get('password')?.hasError('required'))
+        {
+        <div class="invalid-feedback">Please enter a password</div>
+        }
+        @if(registerForm.get('password')?.hasError('minlength'))
+        {
+        <div class="invalid-feedback">Password must be at least 4 characters</div>
+        }
+        @if(registerForm.get('password')?.hasError('maxlength'))
+        {
+        <div class="invalid-feedback">Password must be at most 8 characters</div>
+        }
+    </div>
+
+    <!-- Comfirm Password -->
+    <div class="form-group">
+        <label for="password" class="form-label">Confirm Password</label>
+        <input type="password" class="form-control"
+            [class.is-invalid]='registerForm.get("confirmPassword")?.errors && registerForm.get("confirmPassword")?.touched'
+            formControlName="confirmPassword" placeholder="empty">
+        @if(registerForm.get('confirmPassword')?.hasError('required'))
+        {
+        <div class="invalid-feedback">Please enter a confirm password</div>
+        }
+        @else if(registerForm.get('confirmPassword')?.hasError('isMatching'))
+        {
+        <div class="invalid-feedback">Confirm password must match password</div>
+        }
+    </div>
+
+    <!-- Errors -->
+    @if(validationErrors!.length > 0){
+        <div class="row">
+            <ul class="text-danger">
+                @for (error of validationErrors; track $index) {
+                    <li>{{error}}</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <!-- Submit -->
+    <div class="form-group text-center mt-2">
+        <button type="submit" class="btn btn-success" [disabled]="!registerForm.valid">Register</button>
+        <button type="button" class="btn btn-default m-2" (click)="cancel()">Cancel</button>
+    </div>
+</form>
+
+<p>{{registerForm.status}}</p>

@@ -1,0 +1,77 @@
+<div class="text-center mt-3">
+    <h2>Messages</h2>
+</div>
+<div class="row mt-3 mb-4">
+    <div class="btn-group col-auto" name="container">
+        <button class="btn btn-primary" btnRadio="Unread" (click)="loadMessages()" [(ngModel)]="container">
+            <i class="bi bi-envelope"></i> Unread
+        </button>
+        <button class="btn btn-info" btnRadio="Inbox" (click)="loadMessages()" [(ngModel)]="container">
+            <i class="bi bi-envelope-open"></i> Inbox
+        </button>
+        <button class="btn btn-success" btnRadio="Outbox" (click)="loadMessages()" [(ngModel)]="container">
+            <i class="bi bi-send"></i> Outbox
+        </button>
+    </div>
+</div>
+
+@if(messages.length === 0)
+{
+<div class="row">
+    <h3>There are no messages</h3>
+</div>
+}
+
+@if(messages.length > 0)
+{
+<div class="row">
+    <table class="table table-hover" style="cursor: pointer">
+        <tr>
+            <th style="width: 40%;">Message</th>
+            <th style="width: 20%;">From / To</th>
+            <th style="width: 20%;">Sent / Received</th>
+            <th style="width: 20%;"></th>
+        </tr>
+        <tbody>
+            @for (m of messages; track $index)
+            {
+            <tr routerLink="{{getLink(m)}}" [queryParams]="{tab: 3}" [hidden]="loadingFlag">
+                <td>{{m.content}}</td>
+                <td>
+                    @if(container === 'Outbox')
+                    {
+                    <div class="">
+                        <img class="img-circle rounded-circle mr-2" src="{{m.recipientPhotoUrl || './user.png'}}" alt="{{m.recipientUsername}}">
+                        <strong> {{m.recipientUsername | titlecase}}</strong>
+                    </div>
+                    }
+                    @if(container !== 'Outbox')
+                    {
+                    <div>
+                        <img class="img-circle rounded-circle mr-2" src="{{m.senderPhotoUrl || './user.png'}}" alt="{{m.senderUsername}}">
+                        <strong> {{m.senderUsername | titlecase}}</strong>
+                    </div>
+                    }
+                </td>
+                <td>{{m.messageSent | date: 'short'}}</td>
+                <td>
+                    <button class="btn btn-danger" (click)="$event.stopPropagation(); deleteMessage(m.id)">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+}
+
+
+@if(messages.length > 0 && loadingFlag === false)
+{
+<div class="d-flex justify-content-center">
+    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+        [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+        nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" />
+</div>
+}

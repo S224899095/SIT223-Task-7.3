@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-4">
+        <div class="card">
+            <img src="{{member.photoUrl || './user.png'}}" alt="{{member.knownAs}}" class="card-img-top img-thumbnail">
+            <div class="card-body">
+                @if((presenceService.onlineUsers$ | async)?.includes(member!.username))
+                {
+                <div class="mb-2">
+                    <i class="bi bi-person-circle text-success"></i> Online
+                </div>
+                }
+                @else{
+                <div class="mb-2">
+                    <i class="bi bi-person-circle text-default"></i> Offline
+                </div>
+                }
+                <div>
+                    <strong>Location:</strong>
+                    <p>{{member.city}}, {{member.country}}</p>
+                </div>
+                <div>
+                    <strong>Age:</strong>
+                    <p>{{member.age}} years old</p>
+                </div>
+                <div>
+                    <strong>Last Active:</strong>
+                    <p>{{member.lastActive | date: 'fullDate'}}</p>
+                </div>
+                <div>
+                    <strong>Member since:</strong>
+                    <p>{{member.created | date: 'fullDate'}}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group d-flex">
+                    <button class="btn btn-primary">Like</button>
+                    <button class="btn btn-success" (click)="selectTab(getMessageTabIndex())">Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <tabset class="member-tabset" #memberTabs>
+            <tab heading="About {{member.knownAs}}" (selectTab)="onTabActivated($event)">
+                <div class="mt-2">
+                    <h4>Description</h4>
+                    <p>{{member.introduction}}</p>
+                    <h4>Looking for</h4>
+                    <p>{{member.lookingFor}}</p>
+                </div>
+            </tab>
+            <tab heading="Interests" (selectTab)="onTabActivated($event)">
+                <div class="mt-2">
+                    <h4>Interests</h4>
+                    <p>{{member.interests}}</p>
+                </div>
+            </tab>
+            <tab heading="Photos" (selectTab)="onTabActivated($event)">
+                <div class="mt-2">
+                    Photos go here!
+                </div>
+            </tab>
+            <tab heading="Messages" (selectTab)="onTabActivated($event)">
+                <div class="mt-2">
+                    <app-member-messages [username]="member.username" />
+                </div>
+            </tab>
+        </tabset>
+    </div>
+</div>
